@@ -15,7 +15,7 @@ File.readlines('day3.txt').each do |line|
       zeroes[index] += 1
     end
   end
-  elements << line
+  elements << line.strip
 end
 
 # puts ones
@@ -68,15 +68,39 @@ def filter_include(arr, index, value)
 end
 
 # Start with the oxygen generator rating
-start = elements
+oxygen = elements.map(&:clone)
 12.times do |index|
-  ones, zeroes = get_ones_and_zeroes(start)
+  puts "start length #{oxygen.count}"
+  ones, zeroes = get_ones_and_zeroes(oxygen)
   pp ones, zeroes
 
   if ones[index] >= zeroes[index]
-    start = filter_include(start, index, '1')
+    oxygen = filter_include(oxygen, index, '1')
   else 
-    start = filter_include(start, index, '0')
+    oxygen = filter_include(oxygen, index, '0')
   end
-
 end
+
+co2 = elements.map(&:clone)
+12.times do |index|
+  if co2.count == 1
+    puts "oh snap"
+    break
+  end
+  puts "start length #{co2.count}"
+  ones, zeroes = get_ones_and_zeroes(co2)
+  pp ones, zeroes
+
+  if zeroes[index] <= ones[index]
+    co2 = filter_include(co2, index, '0')
+  elsif ones[index] <= zeroes[index]
+    co2 = filter_include(co2, index, '1')
+  end
+  # if ones[index] >= zeroes[index]
+  #   co2 = filter_include(co2, index, '1')
+  # else 
+  #   co2 = filter_include(co2, index, '0')
+  # end
+end
+
+pp co2.first.to_i(2) * oxygen.first.to_i(2)
